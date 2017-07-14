@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 routes=$(kubectl get nodes -o json | jq '.items | .[] | .spec.podCIDR, .spec.externalID' -r | xargs | sed 's/\([^ ]\+\) \([^ ]\+\) /\1 \2\n/g')
 

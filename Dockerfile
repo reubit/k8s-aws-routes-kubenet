@@ -1,9 +1,8 @@
-FROM ubuntu:xenial
+FROM alpine:latest
 
-RUN apt-get update && apt-get install -yq jq python-pip curl && \
-      pip install --upgrade pip
+RUN apk add --no-cache jq python py-pip curl
 
-RUN pip install awscli
+RUN pip install --upgrade pip && pip install awscli
 
 RUN cd /usr/local/bin/ && \
       curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl && \
