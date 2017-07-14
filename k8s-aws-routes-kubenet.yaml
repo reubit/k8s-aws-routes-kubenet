@@ -51,7 +51,6 @@ metadata:
   labels:
     k8s-app: k8s-aws-routes-kubenet
     role.kubernetes.io/networking: "1"
-    kubernetes.io/cluster-service: "true"
   name: k8s-aws-routes-kubenet
   namespace: kube-system
 spec:
@@ -68,11 +67,9 @@ spec:
     metadata:
       annotations:
         scheduler.alpha.kubernetes.io/critical-pod: ""
-        scheduler.alpha.kubernetes.io/tolerations: '[{"key":"CriticalAddonsOnly", "operator":"Exists"}]'
       labels:
         k8s-app: k8s-aws-routes-kubenet
         role.kubernetes.io/networking: "1"
-        kubernetes.io/cluster-service: "true"
     spec:
       serviceAccountName: k8s-aws-routes-kubenet
       containers:
@@ -95,7 +92,9 @@ spec:
       hostNetwork: true
       restartPolicy: Always
       tolerations:
-      - effect: NoSchedule
-        key: node-role.kubernetes.io/master
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
       - key: CriticalAddonsOnly
         operator: Exists
+      nodeSelector:
+        kubernetes.io/role: master
