@@ -1,6 +1,6 @@
 FROM alpine:latest
 
-RUN apk add --no-cache jq python py-pip curl
+RUN apk add --no-cache bash jq python py-pip curl
 
 RUN pip install --upgrade pip && pip install awscli
 
