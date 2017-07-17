@@ -17,6 +17,13 @@ route_tables=$(
 commands=$(
 for table in $route_tables; do
   OIFS=$IFS; IFS=$'\n'
+
+  blackhole_routes=$(echo "$tables_json" | jq '.RouteTables | .[] | select(.RouteTableId == "'${table}'") | .Routes | .[] | select(.State == "blackhole") | .DestinationCidrBlock' -r)
+  for blackhole in $blackhole_routes; do
+    # Delete blackhole routes that we don't have a replacement route for
+    echo "$routes" | grep $blackhole || echo "aws ec2 delete-route --route-table-id $table --destination-cidr-block $blackhole"
+  done
+
   for route in $routes; do
     cidr=$(echo "$route" | awk '{ print $1}')
     instance_id=$(echo "$route" | awk '{ print $2}')
